@@ -115,3 +115,40 @@
   height: 1em;
   margin-left: 0.5rem;
 }
+
+.lowboard {
+  width: 315px;
+  height: 391.875px;
+  position: absolute;
+  text-align: center;
+  background: rgb(205 205 205);
+}
+
+.board {
+  width: 270px;
+  height: 270px;
+  position: absolute;
+  left: 22.5px;
+  top: 101.25px;
+  background: rgb(205 205 205);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cell {
+  width: 30px;
+  height: 30px;
+  background-image: url('~/assets/images/closed.png');
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 10px;
+  line-height: 23px;
+  background-size: 30px;
+}
+
+.tile {
+  width: 30px;
+  height: 30px;
+  background: url('~/assets/images/icons.png');
+  background-position: 60px;
+}
