@@ -113,13 +113,11 @@ const Home = () => {
       }
     }
   }
-  console.table(board);
 
   const onClick = (x: number, y: number) => {
     const newuserInputs: (0 | 1 | 2 | 3)[][] = userInputs.map((row) =>
       row.map((cell) => cell as 0 | 1 | 2 | 3)
     );
-    const newbombMap: number[][] = JSON.parse(JSON.stringify(bombMap));
 
     if (bombMap[y][x] === 1) {
       alert('爆発！');
@@ -131,8 +129,6 @@ const Home = () => {
     if (!isPlaying) {
       bombrize(newuserInputs);
     }
-    console.table(bombMap);
-    console.log('aaaaaa');
     setUserInputs(newuserInputs);
   };
 
