@@ -96,7 +96,11 @@ const Home = () => {
       for (const d of directions) {
         const k = t + d[0];
         const p = n + d[1];
-        if (bombMap[t + d[0]] === undefined || bombMap[t + d[0]][n + d[1]] === undefined) {
+        if (
+          bombMap[t + d[0]] === undefined ||
+          bombMap[t + d[0]][n + d[1]] === undefined ||
+          userInputs[t + d[0]][n + d[1]] === 3
+        ) {
           continue;
         } else if (bombMap[k][p] === 1) {
           bombnum++;
@@ -133,6 +137,9 @@ const Home = () => {
   //空白分裂
   for (let t = 0; t < 9; t++) {
     for (let n = 0; n < 9; n++) {
+      if (userInputs[t][n] === 3) {
+        board[t][n] = 10;
+      }
       if (userInputs[t][n] === 1) {
         void_chain(t, n);
       }
@@ -150,12 +157,29 @@ const Home = () => {
     newuserInputs[y][x] = 1;
 
     // ここは爆弾を置く if
-    const isPlaying = userInputs.some((row) => row.some((input) => input !== 0));
+    const isPlaying = userInputs.some((row) => row.some((input) => input === 1));
     if (!isPlaying) {
       bombrize(newuserInputs);
     }
     setUserInputs(newuserInputs);
   };
+
+  // const leftClick = (x: number, y: number, event: React.MouseEvent<HTMLDivElement>) => {
+  //   if (event) {
+  //     event.preventDefault(); // 右クリックのデフォルトの挙動を無効化
+  //   }
+  //   console.log(x, y);
+  //   const leftuserInputs: (0 | 1 | 2 | 3)[][] = userInputs.map((row) =>
+  //     row.map((cell) => cell as 0 | 1 | 2 | 3)
+  //   );
+  //   if (userInputs[y][x] === 3) {
+  //     leftuserInputs[y][x] = 0;
+  //     setUserInputs(leftuserInputs);
+  //   } else if (board[y][x] === -1) {
+  //     leftuserInputs[y][x] = 3;
+  //     setUserInputs(leftuserInputs);
+  //   }
+  // };
 
   return (
     <div className={styles.container}>
@@ -167,14 +191,19 @@ const Home = () => {
               <div
                 className={styles.cell}
                 style={{
-                  borderTopColor: color === -1 ? 'rgb(255 255 255)' : 'rgb(74 74 74)',
-                  borderRightColor: color === -1 ? 'rgb(134 134 134)' : 'rgb(74 74 74)',
-                  borderBottomColor: color === -1 ? 'rgb(134 134 134)' : 'rgb(74 74 74)',
-                  borderLeftColor: color === -1 ? 'rgb(255 255 255)' : 'rgb(74 74 74)',
-                  borderWidth: color === -1 ? '4px' : '0.5px',
+                  borderTopColor:
+                    color === -1 || color === 10 ? 'rgb(255 255 255)' : 'rgb(74 74 74)',
+                  borderRightColor:
+                    color === -1 || color === 10 ? 'rgb(134 134 134)' : 'rgb(74 74 74)',
+                  borderBottomColor:
+                    color === -1 || color === 10 ? 'rgb(134 134 134)' : 'rgb(74 74 74)',
+                  borderLeftColor:
+                    color === -1 || color === 10 ? 'rgb(255 255 255)' : 'rgb(74 74 74)',
+                  borderWidth: color === -1 || color === 10 ? '4px' : '0.5px',
                 }}
                 key={`${x}-${y}`}
                 onClick={() => onClick(x, y)}
+                //onContextMenu={() => leftClick(x, y)}
               >
                 {color !== 0 && (
                   <div
