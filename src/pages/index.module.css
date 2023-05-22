@@ -117,28 +117,33 @@
 }
 
 .lowboard {
-  width: 315px;
-  height: 391.875px;
+  width: 399px;
+  height: 496px;
   position: absolute;
   text-align: center;
   background: rgb(205 205 205);
 }
 
 .board {
-  width: 270px;
-  height: 270px;
+  width: 342px;
+  height: 342px;
   position: absolute;
-  left: 22.5px;
-  top: 101.25px;
+  left: 28.5px;
+  top: 125.25px;
   background: rgb(205 205 205);
   display: flex;
   flex-wrap: wrap;
 }
 
 .cell {
-  width: 30px;
-  height: 30px;
-  background-image: url('~/assets/images/closed.png');
+  width: 38px;
+  height: 38px;
+  border-top-color: rgb(255 255 255);
+  border-right-color: rgb(134 134 134);
+  border-bottom-color: rgb(134 134 134);
+  border-left-color: rgb(255 255 255);
+  border-style: solid;
+  border-width: 4px;
   display: flex;
   flex-wrap: wrap;
   font-size: 10px;
@@ -151,4 +156,5 @@
   height: 30px;
   background: url('~/assets/images/icons.png');
   background-position: 60px;
+  margin: 3px;
 }
