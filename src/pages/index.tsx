@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styles from './index.module.css';
 
 const Home = () => {
@@ -24,6 +24,28 @@ const Home = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ]);
+  const [timer, setTimer] = useState({
+    startedTime: 0,
+    currentTime: 0,
+  });
+  const displayTime = Math.floor((timer.currentTime - timer.startedTime) / 1000);
+
+  function gow() {
+    setTimer((prevTime) => ({ ...prevTime, startedTime: Date.now() }));
+    setTimer((prevTime) => ({ ...prevTime, currentTime: Date.now() }));
+    console.log(timer.startedTime);
+    const interval = setInterval(function () {
+      setTimer(function (prevTimer) {
+        return {
+          ...prevTimer,
+          currentTime: Date.now(),
+        };
+      });
+    }, 1000);
+    return function () {
+      clearInterval(interval);
+    };
+  }
 
   const board: number[][] = [
     [-1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -71,6 +93,7 @@ const Home = () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]);
+    setTimer((prevTime) => ({ ...prevTime, currentTime: Date.now() }));
   };
 
   const bombrize = (one: (0 | 1 | 2 | 3)[][]) => {
@@ -89,7 +112,6 @@ const Home = () => {
 
     setBombMap(newBombMap); // 新しい爆弾の配置をセット
   };
-
   const void_chain = (t: number, n: number) => {
     if (userInputs[t][n] !== 3) {
       let bombnum = 0;
@@ -161,6 +183,7 @@ const Home = () => {
       const isPlaying = userInputs.some((row) => row.some((input) => input === 1));
       if (!isPlaying) {
         bombrize(newuserInputs);
+        gow();
       }
       setUserInputs(newuserInputs);
     }
@@ -170,7 +193,6 @@ const Home = () => {
     if (event) {
       event.preventDefault(); // 右クリックのデフォルトの挙動を無効化
     }
-    console.log(x, y);
     const leftuserInputs: (0 | 1 | 2 | 3)[][] = userInputs.map((row) =>
       row.map((cell) => cell as 0 | 1 | 2 | 3)
     );
@@ -187,6 +209,9 @@ const Home = () => {
     <div className={styles.container}>
       <div className={styles.lowboard}>
         <div className={styles.reset} onClick={reset} />
+        <div className={styles.timer}>
+          <a>{displayTime}</a>
+        </div>
         <div className={styles.board}>
           {board.map((row, y) =>
             row.map((color, x) => (

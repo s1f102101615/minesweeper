@@ -188,3 +188,8 @@
   border-right-width: 3px;
   background-position: 166px;
 }
+
+.timer {
+  margin-top: 10px;
+  margin-left: 0;
+}
