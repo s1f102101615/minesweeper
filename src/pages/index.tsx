@@ -91,46 +91,47 @@ const Home = () => {
   };
 
   const void_chain = (t: number, n: number) => {
-    let bombnum = 0;
-    if (bombMap[t][n] !== 1) {
-      for (const d of directions) {
-        const k = t + d[0];
-        const p = n + d[1];
-        if (
-          bombMap[t + d[0]] === undefined ||
-          bombMap[t + d[0]][n + d[1]] === undefined ||
-          userInputs[t + d[0]][n + d[1]] === 3
-        ) {
-          continue;
-        } else if (bombMap[k][p] === 1) {
-          bombnum++;
-        }
-      }
-      if (bombnum === 0) {
-        board[t][n] = 0;
+    if (userInputs[t][n] !== 3) {
+      let bombnum = 0;
+      if (bombMap[t][n] !== 1) {
         for (const d of directions) {
-          if (
-            board[t + d[0]] === undefined ||
-            board[t + d[0]][n + d[1]] === undefined ||
-            board[t + d[0]][n + d[1]] === 0
-          ) {
+          const k = t + d[0];
+          const p = n + d[1];
+          if (bombMap[t + d[0]] === undefined || bombMap[t + d[0]][n + d[1]] === undefined) {
             continue;
+          } else if (bombMap[k][p] === 1) {
+            bombnum++;
           }
-          board[t + d[0]][n + d[1]] = 0;
-          void_chain(t + d[0], n + d[1]);
         }
-      }
-      if (bombnum !== 0) {
-        board[t][n] = bombnum;
+        if (bombnum === 0) {
+          board[t][n] = 0;
+          for (const d of directions) {
+            if (
+              board[t + d[0]] === undefined ||
+              board[t + d[0]][n + d[1]] === undefined ||
+              board[t + d[0]][n + d[1]] === 0 ||
+              userInputs[t + d[0]][n + d[1]] === 3
+            ) {
+              continue;
+            }
+            board[t + d[0]][n + d[1]] = 0;
+            void_chain(t + d[0], n + d[1]);
+          }
+        }
+        if (bombnum !== 0) {
+          board[t][n] = bombnum;
+        }
+      } else {
+        for (let p = 0; p < 9; p++) {
+          for (let k = 0; k < 9; k++) {
+            if (bombMap[p][k] === 1) {
+              board[p][k] = 11;
+            }
+          }
+        }
       }
     } else {
-      for (let p = 0; p < 9; p++) {
-        for (let k = 0; k < 9; k++) {
-          if (bombMap[p][k] === 1) {
-            board[p][k] = 11;
-          }
-        }
-      }
+      return;
     }
   };
 
@@ -150,36 +151,37 @@ const Home = () => {
     const newuserInputs: (0 | 1 | 2 | 3)[][] = userInputs.map((row) =>
       row.map((cell) => cell as 0 | 1 | 2 | 3)
     );
+    if (userInputs[y][x] !== 3) {
+      if (bombMap[y][x] === 1) {
+        alert('爆発！');
+      }
+      newuserInputs[y][x] = 1;
 
-    if (bombMap[y][x] === 1) {
-      alert('爆発！');
+      // ここは爆弾を置く if
+      const isPlaying = userInputs.some((row) => row.some((input) => input === 1));
+      if (!isPlaying) {
+        bombrize(newuserInputs);
+      }
+      setUserInputs(newuserInputs);
     }
-    newuserInputs[y][x] = 1;
-
-    // ここは爆弾を置く if
-    const isPlaying = userInputs.some((row) => row.some((input) => input === 1));
-    if (!isPlaying) {
-      bombrize(newuserInputs);
-    }
-    setUserInputs(newuserInputs);
   };
 
-  // const leftClick = (x: number, y: number, event: React.MouseEvent<HTMLDivElement>) => {
-  //   if (event) {
-  //     event.preventDefault(); // 右クリックのデフォルトの挙動を無効化
-  //   }
-  //   console.log(x, y);
-  //   const leftuserInputs: (0 | 1 | 2 | 3)[][] = userInputs.map((row) =>
-  //     row.map((cell) => cell as 0 | 1 | 2 | 3)
-  //   );
-  //   if (userInputs[y][x] === 3) {
-  //     leftuserInputs[y][x] = 0;
-  //     setUserInputs(leftuserInputs);
-  //   } else if (board[y][x] === -1) {
-  //     leftuserInputs[y][x] = 3;
-  //     setUserInputs(leftuserInputs);
-  //   }
-  // };
+  const leftClick = (x: number, y: number, event?: React.MouseEvent<HTMLDivElement>) => {
+    if (event) {
+      event.preventDefault(); // 右クリックのデフォルトの挙動を無効化
+    }
+    console.log(x, y);
+    const leftuserInputs: (0 | 1 | 2 | 3)[][] = userInputs.map((row) =>
+      row.map((cell) => cell as 0 | 1 | 2 | 3)
+    );
+    if (leftuserInputs[y][x] === 3) {
+      leftuserInputs[y][x] = 0;
+      setUserInputs(leftuserInputs);
+    } else if (board[y][x] === -1) {
+      leftuserInputs[y][x] = 3;
+      setUserInputs(leftuserInputs);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -203,7 +205,7 @@ const Home = () => {
                 }}
                 key={`${x}-${y}`}
                 onClick={() => onClick(x, y)}
-                //onContextMenu={() => leftClick(x, y)}
+                onContextMenu={(event) => leftClick(x, y, event)}
               >
                 {color !== 0 && (
                   <div
