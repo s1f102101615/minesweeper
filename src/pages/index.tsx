@@ -27,24 +27,28 @@ const Home = () => {
   const [timer, setTimer] = useState({
     startedTime: 0,
     currentTime: 0,
+    timer: 1,
   });
-  const displayTime = Math.floor((timer.currentTime - timer.startedTime) / 1000);
-
-  function gow() {
+  const displayTime = Math.floor(((timer.currentTime - timer.startedTime) * timer.timer) / 1000);
+  let interval: string | number | NodeJS.Timer | undefined;
+  function gow(x: boolean | undefined) {
     setTimer((prevTime) => ({ ...prevTime, startedTime: Date.now() }));
     setTimer((prevTime) => ({ ...prevTime, currentTime: Date.now() }));
-    console.log(timer.startedTime);
-    const interval = setInterval(function () {
-      setTimer(function (prevTimer) {
-        return {
-          ...prevTimer,
-          currentTime: Date.now(),
-        };
-      });
-    }, 1000);
-    return function () {
-      clearInterval(interval);
-    };
+    if (x) {
+      setTimer((prevTime) => ({ ...prevTime, timer: 1 }));
+      console.log('true');
+      interval = setInterval(function () {
+        setTimer(function (prevTimer) {
+          return {
+            ...prevTimer,
+            currentTime: Date.now(),
+          };
+        });
+      }, 1000);
+    } else {
+      console.log('false');
+      setTimer((prevTime) => ({ ...prevTime, timer: 0 }));
+    }
   }
 
   const board: number[][] = [
@@ -93,7 +97,7 @@ const Home = () => {
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]);
-    setTimer((prevTime) => ({ ...prevTime, currentTime: Date.now() }));
+    gow(false);
   };
 
   const bombrize = (one: (0 | 1 | 2 | 3)[][]) => {
@@ -183,7 +187,7 @@ const Home = () => {
       const isPlaying = userInputs.some((row) => row.some((input) => input === 1));
       if (!isPlaying) {
         bombrize(newuserInputs);
-        gow();
+        gow(true);
       }
       setUserInputs(newuserInputs);
     }
