@@ -123,19 +123,21 @@
   text-align: center;
   background: rgb(205 205 205);
   border-style: solid;
-  border-width: 1px;
+  border-width: 6px;
   border-color: rgb(255 255 255) rgb(134 134 134) rgb(134 134 134) rgb(255 255 255);
 }
 
 .board {
-  width: 342px;
-  height: 342px;
+  width: 354px;
+  height: 354px;
   position: absolute;
-  left: 28.5px;
+  left: 17.5px;
   top: 125.25px;
   background: rgb(205 205 205);
   display: flex;
   flex-wrap: wrap;
+  border: 6px solid;
+  border-color: rgb(134 134 134) rgb(255 255 255) rgb(255 255 255) rgb(134 134 134);
 }
 
 .cell {
