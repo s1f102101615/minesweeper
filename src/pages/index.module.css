@@ -173,8 +173,9 @@
   border-style: solid;
   border-width: 4px;
   border-color: rgb(255 255 255) rgb(134 134 134) rgb(134 134 134) rgb(255 255 255);
-  margin-top: 37px;
-  margin-left: 168px;
+  left: 168px;
+  position: absolute;
+  top: 36px;
 }
 
 /* stylelint-disable-next-line block-no-empty */
@@ -187,9 +188,14 @@
   border-bottom-width: 3px;
   border-right-width: 3px;
   background-position: 166px;
+  left: 168px;
+  position: absolute;
+  top: 36px;
 }
 
 .timer {
-  margin-top: 10px;
-  margin-left: 0;
+  top: 47px;
+  left: 281px;
+  font-size: 200%;
+  position: absolute;
 }
